@@ -12,7 +12,7 @@ public class GameGo {
 		print(gb.toString());
 		
 		RandomPlayer a = new RandomPlayer("mark");
-		GamePlayer b = new HumanPlayer("bartholomew");
+		GamePlayer b = new AIPlayer("bartholomew");
 		
 		boolean agoes = true;
 		while(gb.getWinner() == null){
