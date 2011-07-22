@@ -11,11 +11,11 @@ public class GameGo {
 		GameBoard gb = new GameBoard();
 		print(gb.toString());
 		
-		RandomPlayer a = new RandomPlayer("mark");
-		GamePlayer b = new AIPlayer("bartholomew");
+		GamePlayer a = new RandomPlayer("mark");
+		GamePlayer b = new HumanPlayer("bartholomew");
 		
 		boolean agoes = true;
-		while(gb.getWinner() == null){
+		while((gb.getWinner() == null) && !gb.isFull()){
 			
 			if(agoes){
 				a.move(gb);
@@ -30,6 +30,7 @@ public class GameGo {
 			
 		}
 		print("winner is: " + gb.getWinner().toString());
+		
 		
 	}
 }

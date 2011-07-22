@@ -51,6 +51,25 @@ public class GameBoard {
 	}
 	
 	
+	public boolean isFull(){
+		return !(isEmptyCells(board));
+	}
+	
+	private boolean isEmptyCells(GameCell[][] cells){
+		//given a board-as-matrix, find the empty cells;
+		//Each string represents a mvoe.
+		String[] empties = new String[9];
+		int place = 0; //the next open cell in empties.
+		for (int i = 0; i <3; i++){
+			for (int j = 0; j< 3; j++){
+				if(cells[i][j].isEmpty()){
+					return true;
+				}
+			}	
+		}
+		return false;
+	}
+	
 	
 	//returns 1 if they all are equal, 0 otherwise
 	private GamePlayer checkEqual(GameCell a, GameCell b, GameCell c ){ //we could also use the ... keyword
