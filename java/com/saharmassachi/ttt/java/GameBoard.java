@@ -1,15 +1,31 @@
 package com.saharmassachi.ttt.java;
 
+import java.util.Arrays;
+
 //This object represents the tic tac toe board
 //It also contains the method to check to see if anyone has won.
 //With other helper methods
 public class GameBoard {
 	GameCell[][] board; //0,0 is topleft. 0,2 is top right
-	public GameBoard(){
+	GamePlayer playerOne;
+	GamePlayer playerTwo;
+	GamePlayer current;
+	boolean endgame = false;
+	public GameBoard(GamePlayer a, GamePlayer b){
 		board = new GameCell[3][3];
 		initBoard();
+		playerOne = a;
+		playerTwo = b;
+		current = playerOne;
 	}
 
+	public GameBoard(GamePlayer a, GamePlayer b, GameCell[][] board){
+		playerOne = a;
+		playerTwo = b;
+		current = playerOne;
+		this.board = board;
+	}
+	
 	public void initBoard(){
 		for (GameCell[] g : board){
 			for (int i = 0; i < 3; i ++){
@@ -58,8 +74,6 @@ public class GameBoard {
 	private boolean isEmptyCells(GameCell[][] cells){
 		//given a board-as-matrix, find the empty cells;
 		//Each string represents a mvoe.
-		String[] empties = new String[9];
-		int place = 0; //the next open cell in empties.
 		for (int i = 0; i <3; i++){
 			for (int j = 0; j< 3; j++){
 				if(cells[i][j].isEmpty()){
@@ -67,6 +81,7 @@ public class GameBoard {
 				}
 			}	
 		}
+		endgame = true;
 		return false;
 	}
 	
@@ -80,7 +95,13 @@ public class GameBoard {
 	}
 	
 	public GameCell[][] getBoardCopy(){
-		return board.clone();
+		GameCell[][] newboard = new GameCell[3][3];
+		for (int i = 0; i < 3; i++){
+			for (int j = 0; j < 3; j ++){
+				newboard[i][j] = board[i][j].copyOf();
+		}
+		}
+		return newboard;
 	}
 	
 	
@@ -91,8 +112,41 @@ public class GameBoard {
 		return false;
 	}
 	
+	//how players move.
 	public void place(int a, int b, GamePlayer P){
-		board[a][b].claim(P);
+		if (P.equals(current)){ //this prevents cheating.
+			board[a][b].claim(P);
+			iterPlayer();
+		}
 	}
 	
+	public GamePlayer nextPlayer(){
+		//returns the player whose turn it is to play. 
+		return current;
+	}
+	
+	//switch the current player (aka the one whose move it is) 
+	private void iterPlayer(){
+		if (current.equals(playerOne)){
+			current = playerTwo;
+			return;
+		}
+		current = playerOne;
+	}
+	
+	public GamePlayer[] getPlayers(){
+		GamePlayer[] toreturn = {playerOne, playerTwo};
+		return toreturn;
+	}
+	
+	public void endGame(){
+		current = null;
+		endgame = true;
+	}
+	
+	public boolean isEnded(){
+		if(endgame == true) return true;
+		if(getWinner() != null) endgame = true;
+		return endgame;
+	}
 }

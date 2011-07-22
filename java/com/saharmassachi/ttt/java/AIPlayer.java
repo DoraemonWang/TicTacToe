@@ -15,8 +15,12 @@ public class AIPlayer extends GamePlayer {
 
 	@Override
 	public void move(GameBoard b) {
-		int[] moves = winningMove(b);
+		int[] moves = winningMove(b, this);
+		int[] foemoves = winningMove(b, getOtherPlayer(b));
 		if( moves != null){
+			b.place(moves[0], moves[1], this);
+		}
+		else if( foemoves != null){
 			b.place(moves[0], moves[1], this);
 		}
 		else{
@@ -25,7 +29,7 @@ public class AIPlayer extends GamePlayer {
 	}
 
 	//given a board, is there a move that could win the game?
-	private int[] winningMove(GameBoard b){
+	private int[] winningMove(GameBoard b, GamePlayer P){
 		GameCell[][] cells = b.getBoardCopy();
 		String[] empties  = findEmptyCells(cells);
 		//for each empty cell: place it in the copied board. 
@@ -35,7 +39,7 @@ public class AIPlayer extends GamePlayer {
 			
 			int one = Integer.parseInt(moves[1]);
 			int two = Integer.parseInt(moves[3]);
-			cells[one][two].claim(this);
+			cells[one][two].claim(P);
 			if (isWins(cells)){ 
 				int[] intMoves = {one, two}; 
 				return intMoves; 
@@ -56,6 +60,7 @@ public class AIPlayer extends GamePlayer {
 		return null;
 	}
 
+	//which cells are empty? 
 	private String[] findEmptyCells(GameCell[][] cells){
 		//given a board-as-matrix, find the empty cells;
 		//Each string represents a mvoe.
@@ -93,7 +98,8 @@ public class AIPlayer extends GamePlayer {
 
 	//returns 1 if they are equal, 0 if not.
 	private int checkEqual(GameCell a, GameCell b, GameCell c ){ //we could also use the ... keyword
-		if ((a.getMark() == b.getMark()) && (b.getMark() == c.getMark() )&& (c.getMark() != "")){
+		if ((a.getMark().equals(b.getMark())) && (b.getMark().equals(c.getMark())) && (c.getMark() != " ")){ 
+			//if all the marks are the same, and they are not empty
 			return 1;
 		}
 		return 0;
@@ -110,7 +116,14 @@ public class AIPlayer extends GamePlayer {
 		else {
 			randomMove(b);
 		}
-
 	}
 
+	
+	private GamePlayer getOtherPlayer(GameBoard b){
+		GamePlayer[] players = b.getPlayers();
+		if (players[0].equals(this)){
+			return players[1];
+		}
+		return players[0];
+	}
 }

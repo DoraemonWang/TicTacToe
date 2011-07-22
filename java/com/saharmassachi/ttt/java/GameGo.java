@@ -8,28 +8,28 @@ public class GameGo {
 	
 	public static void main(String[] args){
 		System.out.println("hello");
-		GameBoard gb = new GameBoard();
+		
+		GamePlayer a = new RandomPlayer("abraham");
+		GamePlayer b = new AIbetterPlayer("benjamin");
+		GameBoard gb = new GameBoard(a, b);
 		print(gb.toString());
 		
-		GamePlayer a = new RandomPlayer("mark");
-		GamePlayer b = new HumanPlayer("bartholomew");
 		
-		boolean agoes = true;
 		while((gb.getWinner() == null) && !gb.isFull()){
-			
-			if(agoes){
-				a.move(gb);
-			}
-			else{
-				b.move(gb);
-			}
-			GamePlayer aaaa = gb.getWinner();
-			agoes = !agoes;
+			GamePlayer player = gb.nextPlayer();
+			//the board itself knows which player is next.
+			player.move(gb);
 			print(gb.toString());
-			
-			
 		}
-		print("winner is: " + gb.getWinner().toString());
+		
+		GamePlayer winner = gb.getWinner();
+		if(winner  != null){
+			print("winner is: " + gb.getWinner().toString());	
+		}
+		else{
+			print("tie");
+		}
+		
 		
 		
 	}

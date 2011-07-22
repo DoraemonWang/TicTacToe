@@ -29,4 +29,12 @@ public class GameCell {
 	public boolean isEmpty(){
 		return !claimed;
 	}
+	
+	public GameCell copyOf(){
+		GameCell toreturn = new GameCell();
+		if (this.claimed) {
+			toreturn.claim(player);
+		}
+		return toreturn;
+	}
 }
